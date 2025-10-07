@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>造紙業潛在客群搜尋標籤系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .search-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .filter-section {
+            margin-top: 20px;
+        }
+        
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .tag {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #ddd;
+            background: white;
+        }
+        
+        .tag.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .tag:hover {
+            border-color: #667eea;
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .results-header h2 {
+            color: #333;
+        }
+        
+        .stats {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .customer-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .customer-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+        
+        .customer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .customer-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .customer-type {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .customer-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .customer-tag {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tag-high { background: #d4edda; color: #155724; }
+        .tag-medium { background: #fff3cd; color: #856404; }
+        .tag-packaging { background: #cce5ff; color: #004085; }
+        .tag-printing { background: #e2e3e5; color: #383d41; }
+        .tag-publishing { background: #f8d7da; color: #721c24; }
+        .tag-food { background: #d1ecf1; color: #0c5460; }
+        .tag-restaurant { background: #fff3cd; color: #856404; }
+        .tag-retail { background: #cfe2ff; color: #084298; }
+        .tag-manufacture { background: #d1ecf1; color: #0c5460; }
+        .tag-other { background: #e2e3e5; color: #383d41; }
+        
+        .customer-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-icon {
+            color: #667eea;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .export-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .modal-header h2 {
+            color: #333;
+            margin: 0;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover {
+            color: #667eea;
+        }
+        
+        .keyword-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .keyword-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 50px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .keyword-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #667eea;
+        }
+        
+        .keyword-item .remove-btn {
+            cursor: pointer;
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .keyword-item .remove-btn:hover {
+            color: #b71c1c;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .customer-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 造紙業潛在客群搜尋系統</h1>
+            <p>智能標籤分類</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="search-section">
+                <h3 style="margin-bottom: 15px; color: #333;">🔍 搜尋潛在客戶</h3>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="輸入公司名稱關鍵字...（例如：包裝、印刷、紙器、餐飲）">
+                    <button class="btn btn-primary" onclick="searchCustomers()">查詢</button>
+                    <button class="btn btn-secondary" onclick="smartTagging()">🏷️ 智能貼標</button>
+                    <button class="btn btn-secondary" onclick="showCustomKeywordModal()">➕ 自訂關鍵字</button>
+                </div>
+                <div style="margin-top: 10px; padding: 10px; background: #e7f3ff; border-radius: 8px; font-size: 14px;">
+                    <strong>💡 提示：</strong>支援公司名稱模糊搜尋<br>
+                    <strong>🏷️ 智能貼標：</strong>自動查詢多個造紙業相關產業，一次列出所有潛在客戶並自動分類標籤<br>
+                    <strong>➕ 自訂關鍵字：</strong>新增您自己的查詢關鍵字，批次搜尋多個產業
+                </div>
+                
+                <div class="filter-section">
+                    <h4 style="margin-bottom: 10px; color: #666;">📊 快速篩選：</h4>
+                    <div class="filter-tags">
+                        <div class="tag active" onclick="toggleFilter(this, 'all')">全部客戶</div>
+                        <div class="tag" onclick="toggleFilter(this, 'packaging')">📦 包裝業</div>
+                        <div class="tag" onclick="toggleFilter(this, 'printing')">🖨️ 印刷業</div>
+                        <div class="tag" onclick="toggleFilter(this, 'publishing')">📚 出版業</div>
+                        <div class="tag" onclick="toggleFilter(this, 'restaurant')">🍽️ 餐飲業</div>
+                        <div class="tag" onclick="toggleFilter(this, 'retail')">🏪 零售批發</div>
+                        <div class="tag" onclick="toggleFilter(this, 'manufacture')">🏭 製造業</div>
+                        <div class="tag" onclick="toggleFilter(this, 'high')">⭐ 高潛力</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <div class="results-header">
+                    <h2>搜尋結果</h2>
+                    <div class="stats" id="statsDisplay">請輸入關鍵字開始查詢</div>
+                </div>
+                
+                <div id="resultsContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>請輸入關鍵字開始查詢</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="export-section" id="exportSection" style="display: none;">
+                <div>
+                    <strong>💾 匯出功能</strong>
+                    <p style="color: #666; font-size: 14px; margin-top: 5px;">將查詢結果匯出為CSV檔案</p>
+                </div>
+                <button class="btn btn-primary" onclick="exportToCSV()">📥 匯出 CSV</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自訂關鍵字彈窗 -->
+    <div id="keywordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ 自訂查詢關鍵字</h2>
+                <span class="close" onclick="closeKeywordModal()">&times;</span>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="color: #666; margin-bottom: 15px;">新增您想要查詢的關鍵字，系統將批次搜尋所有關鍵字並自動分類標籤。</p>
+                
+                <div class="keyword-input-group">
+                    <input type="text" id="customKeywordInput" placeholder="輸入關鍵字（例如：紙業、瓦楞紙）" onkeypress="if(event.key==='Enter') addCustomKeyword()">
+                    <button class="btn btn-primary" onclick="addCustomKeyword()">新增</button>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #333;">已新增的關鍵字：</strong>
+                </div>
+                <div class="keyword-list" id="customKeywordList">
+                    <span style="color: #999; font-size: 14px;">尚未新增任何關鍵字</span>
+                </div>
+            </div>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                <strong style="color: #856404;">💡 建議關鍵字：</strong>
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('紙業')">紙業</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('瓦楞')">瓦楞</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('紙漿')">紙漿</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('紙品')">紙品</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('環保')">環保</button>
+                    <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="quickAddKeyword('回收')">回收</button>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeKeywordModal()">取消</button>
+                <button class="btn btn-primary" onclick="startCustomSearch()">開始查詢</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allCustomers = [];
+        let filteredCustomers = [];
+        let activeFilter = 'all';
+        let customKeywords = [];
+        
+        // 智能自動標籤系統
+        function autoTagCustomer(customer) {
+            const tags = [];
+            const name = (customer.name || '').toLowerCase();
+            const business = (customer.business || '').toLowerCase();
+            const combined = name + ' ' + business;
+            
+            if (combined.includes('包裝') || combined.includes('紙器') || combined.includes('紙箱') || combined.includes('紙盒')) {
+                tags.push({ label: '包裝業', class: 'tag-packaging' });
+            }
+            if (combined.includes('印刷') || combined.includes('彩印') || combined.includes('印製')) {
+                tags.push({ label: '印刷業', class: 'tag-printing' });
+            }
+            if (combined.includes('出版') || combined.includes('圖書') || combined.includes('雜誌') || combined.includes('期刊')) {
+                tags.push({ label: '出版業', class: 'tag-publishing' });
+            }
+            if (combined.includes('餐飲') || combined.includes('食品') || combined.includes('飲料')) {
+                tags.push({ label: '餐飲業', class: 'tag-restaurant' });
+            }
+            if (combined.includes('零售') || combined.includes('批發') || combined.includes('超市') || combined.includes('便利')) {
+                tags.push({ label: '零售批發', class: 'tag-retail' });
+            }
+            if (combined.includes('製造') || combined.includes('工業') || combined.includes('生產')) {
+                tags.push({ label: '製造業', class: 'tag-manufacture' });
+            }
+            
+            if (tags.length === 0) {
+                tags.push({ label: '其他產業', class: 'tag-other' });
+            }
+            
+            const capital = parseInt(customer.capital) || 0;
+            if (capital >= 50000000) {
+                tags.push({ label: '高潛力', class: 'tag-high' });
+            } else {
+                tags.push({ label: '中潛力', class: 'tag-medium' });
+            }
+            
+            return tags;
+        }
+        
+        // 格式化資本額
+        function formatCapital(amount) {
+            if (!amount) return '';
+            const num = parseInt(amount);
+            if (num >= 100000000) return '1億以上';
+            if (num >= 50000000) return '5千萬以上';
+            if (num >= 10000000) return '1千萬以上';
+            if (num >= 1000000) return '100萬以上';
+            return '100萬以下';
+        }
+        
+        // 查詢客戶
+        async function searchCustomers() {
+            const query = document.getElementById('searchInput').value.trim();
+            
+            if (!query) {
+                alert('請輸入搜尋關鍵字');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const corsProxy = 'https://api.allorigins.win/raw?url=';
+                const apiUrl = 'https://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C';
+                const params = `?$format=json&$filter=Company_Name like ${encodeURIComponent(query)}&$top=100`;
+                
+                const response = await fetch(corsProxy + encodeURIComponent(apiUrl + params));
+                
+                if (!response.ok) {
+                    throw new Error('API請求失敗');
+                }
+                
+                const data = await response.json();
+                
+                if (!data || data.length === 0) {
+                    document.getElementById('resultsContainer').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">😕</div>
+                            <h3>找不到「${query}」相關公司</h3>
+                            <p>請嘗試其他關鍵字，例如：包裝、印刷、紙器、餐飲</p>
+                            <div style="margin-top: 20px;">
+                                <button class="btn btn-secondary" onclick="smartTagging()">試試智能貼標功能</button>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('statsDisplay').innerHTML = `查詢結果：<strong>0</strong> 筆`;
+                    document.getElementById('exportSection').style.display = 'none';
+                    return;
+                }
+                
+                allCustomers = data.map(company => ({
+                    name: company.Company_Name || '未提供',
+                    type: company.Company_Status_Desc || '公司',
+                    capital: company.Capital_Stock_Amount,
+                    capitalDisplay: formatCapital(company.Capital_Stock_Amount),
+                    address: company.Company_Location || '未提供',
+                    status: company.Company_Status_Desc || '未提供',
+                    date: company.Approve_Date || '未提供',
+                    business: company.Cmp_Business || ''
+                }));
+                
+                activeFilter = 'all';
+                document.querySelectorAll('.filter-tags .tag').forEach(tag => {
+                    if (tag.textContent.includes('全部')) {
+                        tag.classList.add('active');
+                    } else {
+                        tag.classList.remove('active');
+                    }
+                });
+                
+                applyFilter();
+                
+            } catch (error) {
+                console.error('API查詢錯誤:', error);
+                document.getElementById('resultsContainer').innerHTML = `
+                    <div style="padding: 30px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                        <h3 style="color: #d32f2f;">查詢失敗</h3>
+                        <p style="color: #666; margin: 15px 0;">可能原因：網路連線問題或API服務暫時無法使用</p>
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" onclick="searchCustomers()">重新查詢</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('statsDisplay').innerHTML = '查詢失敗';
+            }
+        }
+        
+        // 智能貼標功能
+        async function smartTagging() {
+            if (!confirm('智能貼標功能將自動查詢以下造紙業潛在客戶：\n\n📦 包裝業（包裝、紙器、紙箱）\n🖨️ 印刷業（印刷、彩印）\n📚 出版業（出版、圖書）\n🍽️ 餐飲業（餐飲、食品）\n🏪 零售業（便利、超市）\n\n這可能需要1-2分鐘，是否繼續？')) {
+                return;
+            }
+            
+            const keywords = [
+                { keyword: '包裝', category: 'packaging' },
+                { keyword: '紙器', category: 'packaging' },
+                { keyword: '紙箱', category: 'packaging' },
+                { keyword: '印刷', category: 'printing' },
+                { keyword: '彩印', category: 'printing' },
+                { keyword: '出版', category: 'publishing' },
+                { keyword: '圖書', category: 'publishing' },
+                { keyword: '餐飲', category: 'restaurant' },
+                { keyword: '食品', category: 'restaurant' },
+                { keyword: '便利', category: 'retail' },
+                { keyword: '超市', category: 'retail' }
+            ];
+            
+            await batchSearch(keywords);
+        }
+        
+        // 批次搜尋功能
+        async function batchSearch(keywords) {
+            showSmartTaggingLoading(0, keywords.length);
+            
+            allCustomers = [];
+            let processedCount = 0;
+            
+            try {
+                for (let i = 0; i < keywords.length; i++) {
+                    const item = keywords[i];
+                    
+                    try {
+                        const corsProxy = 'https://api.allorigins.win/raw?url=';
+                        const apiUrl = 'https://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C';
+                        const params = `?$format=json&$filter=Company_Name like ${encodeURIComponent(item.keyword)}&$top=30`;
+                        
+                        const response = await fetch(corsProxy + encodeURIComponent(apiUrl + params));
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            if (data && data.length > 0) {
+                                const companies = data.map(company => ({
+                                    name: company.Company_Name || '未提供',
+                                    type: company.Company_Status_Desc || '公司',
+                                    capital: company.Capital_Stock_Amount,
+                                    capitalDisplay: formatCapital(company.Capital_Stock_Amount),
+                                    address: company.Company_Location || '未提供',
+                                    status: company.Company_Status_Desc || '未提供',
+                                    date: company.Approve_Date || '未提供',
+                                    business: company.Cmp_Business || '',
+                                    searchKeyword: item.keyword,
+                                    suggestedCategory: item.category
+                                }));
+                                
+                                allCustomers.push(...companies);
+                            }
+                        }
+                        
+                        processedCount++;
+                        showSmartTaggingLoading(processedCount, keywords.length);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        
+                    } catch (error) {
+                        console.error(`查詢 ${item.keyword} 失敗:`, error);
+                        processedCount++;
+                        showSmartTaggingLoading(processedCount, keywords.length);
+                    }
+                }
+                
+                const uniqueCompanies = [];
+                const nameSet = new Set();
+                
+                allCustomers.forEach(company => {
+                    if (!nameSet.has(company.name)) {
+                        nameSet.add(company.name);
+                        uniqueCompanies.push(company);
+                    }
+                });
+                
+                allCustomers = uniqueCompanies;
+                
+                if (allCustomers.length === 0) {
+                    document.getElementById('resultsContainer').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">😕</div>
+                            <h3>批次查詢未找到相關公司</h3>
+                            <p>請稍後再試或使用一般查詢功能</p>
+                        </div>
+                    `;
+                    document.getElementById('statsDisplay').innerHTML = `查詢結果：<strong>0</strong> 筆`;
+                    document.getElementById('exportSection').style.display = 'none';
+                } else {
+                    activeFilter = 'all';
+                    document.querySelectorAll('.filter-tags .tag').forEach(tag => {
+                        if (tag.textContent.includes('全部')) {
+                            tag.classList.add('active');
+                        } else {
+                            tag.classList.remove('active');
+                        }
+                    });
+                    
+                    applyFilter();
+                    showTaggingStatistics();
+                }
+                
+            } catch (error) {
+                console.error('批次查詢錯誤:', error);
+                document.getElementById('resultsContainer').innerHTML = `
+                    <div style="padding: 30px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                        <h3 style="color: #d32f2f;">批次查詢失敗</h3>
+                        <p style="color: #666;">請檢查網路連線後重試</p>
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" onclick="smartTagging()">重新執行</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // 顯示智能貼標進度
+        function showSmartTaggingLoading(current, total) {
+            const percentage = Math.round((current / total) * 100);
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <h3>🏷️ 批次查詢進行中...</h3>
+                    <p style="margin-top: 15px;">正在查詢潛在客戶</p>
+                    <div style="margin: 20px auto; max-width: 400px; background: #e9ecef; border-radius: 10px; height: 30px; overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${percentage}%; transition: width 0.3s;"></div>
+                    </div>
+                    <p style="color: #666; font-size: 14px;">已完成 ${current} / ${total} 項查詢（${percentage}%）</p>
+                </div>
+            `;
+        }
+        
+        // 顯示標籤統計
+        function showTaggingStatistics() {
+            const stats = {
+                packaging: 0, printing: 0, publishing: 0,
+                restaurant: 0, retail: 0, manufacture: 0,
+                other: 0, high: 0, medium: 0
+            };
+            
+            allCustomers.forEach(customer => {
+                const tags = autoTagCustomer(customer);
+                tags.forEach(tag => {
+                    if (tag.label === '包裝業') stats.packaging++;
+                    if (tag.label === '印刷業') stats.printing++;
+                    if (tag.label === '出版業') stats.publishing++;
+                    if (tag.label === '餐飲業') stats.restaurant++;
+                    if (tag.label === '零售批發') stats.retail++;
+                    if (tag.label === '製造業') stats.manufacture++;
+                    if (tag.label === '其他產業') stats.other++;
+                    if (tag.label === '高潛力') stats.high++;
+                    if (tag.label === '中潛力') stats.medium++;
+                });
+            });
+            
+            const statsHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">📊 查詢統計</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.packaging}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">📦 包裝業</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.printing}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🖨️ 印刷業</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.publishing}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">📚 出版業</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.restaurant}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🍽️ 餐飲業</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.retail}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🏪 零售批發</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.high}</div>
+                            <div style="color: #666; font-size: 14px; margin-top: 5px;">⭐ 高潛力</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #d4edda; border-radius: 8px; color: #155724; text-align: center;">
+                        ✅ 查詢完成！共找到 <strong>${allCustomers.length}</strong> 家潛在客戶
+                    </div>
+                </div>
+            `;
+            
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = statsHTML + container.innerHTML;
+        }
+        
+        // 顯示自訂關鍵字彈窗
+        function showCustomKeywordModal() {
+            document.getElementById('keywordModal').style.display = 'block';
+            updateKeywordList();
+        }
+        
+        // 關閉彈窗
+        function closeKeywordModal() {
+            document.getElementById('keywordModal').style.display = 'none';
+        }
+        
+        // 新增自訂關鍵字
+        function addCustomKeyword() {
+            const input = document.getElementById('customKeywordInput');
+            const keyword = input.value.trim();
+            
+            if (!keyword) {
+                alert('請輸入關鍵字');
+                return;
+            }
+            
+            if (customKeywords.includes(keyword)) {
+                alert('此關鍵字已存在');
+                return;
+            }
+            
+            customKeywords.push(keyword);
+            input.value = '';
+            updateKeywordList();
+        }
+        
+        // 快速新增關鍵字
+        function quickAddKeyword(keyword) {
+            if (customKeywords.includes(keyword)) {
+                alert('此關鍵字已存在');
+                return;
+            }
+            
+            customKeywords.push(keyword);
+            updateKeywordList();
+        }
+        
+        // 移除關鍵字
+        function removeKeyword(keyword) {
+            customKeywords = customKeywords.filter(k => k !== keyword);
+            updateKeywordList();
+        }
+        
+        // 更新關鍵字列表顯示
+        function updateKeywordList() {
+            const container = document.getElementById('customKeywordList');
+            
+            if (customKeywords.length === 0) {
+                container.innerHTML = '<span style="color: #999; font-size: 14px;">尚未新增任何關鍵字</span>';
+                return;
+            }
+            
+            container.innerHTML = customKeywords.map(keyword => `
+                <div class="keyword-item">
+                    <span>${keyword}</span>
+                    <span class="remove-btn" onclick="removeKeyword('${keyword}')">&times;</span>
+                </div>
+            `).join('');
+        }
+        
+        // 開始自訂關鍵字搜尋
+        async function startCustomSearch() {
+            if (customKeywords.length === 0) {
+                alert('請至少新增一個關鍵字');
+                return;
+            }
+            
+            closeKeywordModal();
+            
+            const keywords = customKeywords.map(keyword => ({
+                keyword: keyword,
+                category: 'custom'
+            }));
+            
+            await batchSearch(keywords);
+        }
+        
+        // 切換篩選
+        function toggleFilter(element, filter) {
+            document.querySelectorAll('.filter-tags .tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            activeFilter = filter;
+            applyFilter();
+        }
+        
+        // 套用篩選
+        function applyFilter() {
+            if (!allCustomers || allCustomers.length === 0) {
+                filteredCustomers = [];
+                displayResults();
+                return;
+            }
+            
+            if (activeFilter === 'all') {
+                filteredCustomers = allCustomers;
+            } else {
+                filteredCustomers = allCustomers.filter(customer => {
+                    const tags = autoTagCustomer(customer);
+                    const tagLabels = tags.map(t => t.label);
+                    
+                    switch(activeFilter) {
+                        case 'packaging': return tagLabels.includes('包裝業');
+                        case 'printing': return tagLabels.includes('印刷業');
+                        case 'publishing': return tagLabels.includes('出版業');
+                        case 'restaurant': return tagLabels.includes('餐飲業');
+                        case 'retail': return tagLabels.includes('零售批發');
+                        case 'manufacture': return tagLabels.includes('製造業');
+                        case 'high': return tagLabels.includes('高潛力');
+                        default: return true;
+                    }
+                });
+            }
+            
+            displayResults();
+        }
+        
+        // 顯示結果
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const statsDisplay = document.getElementById('statsDisplay');
+            const exportSection = document.getElementById('exportSection');
+            
+            if (!filteredCustomers || filteredCustomers.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>此篩選條件沒有結果</h3>
+                        <p>請選擇其他篩選標籤</p>
+                    </div>
+                `;
+                statsDisplay.innerHTML = `篩選結果：<strong>0</strong> 筆`;
+                exportSection.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            filteredCustomers.forEach(customer => {
+                const tags = autoTagCustomer(customer);
+                const tagsHtml = tags.map(tag => 
+                    `<span class="customer-tag ${tag.class}">${tag.label}</span>`
+                ).join('');
+                
+                const infoItems = [];
+                if (customer.address) infoItems.push(`<div class="info-item"><span class="info-icon">📍</span> ${customer.address}</div>`);
+                if (customer.capitalDisplay) infoItems.push(`<div class="info-item"><span class="info-icon">💰</span> 資本額：${customer.capitalDisplay}</div>`);
+                if (customer.status) infoItems.push(`<div class="info-item"><span class="info-icon">📊</span> ${customer.status}</div>`);
+                if (customer.date) infoItems.push(`<div class="info-item"><span class="info-icon">📅</span> 核准日期：${customer.date}</div>`);
+                
+                html += `
+                    <div class="customer-card">
+                        <div class="customer-header">
+                            <div>
+                                <div class="customer-name">${customer.name}</div>
+                                <div class="customer-type">${customer.type}</div>
+                            </div>
+                            <div class="customer-tags">
+                                ${tagsHtml}
+                            </div>
+                        </div>
+                        ${infoItems.length > 0 ? `<div class="customer-info">${infoItems.join('')}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            statsDisplay.innerHTML = `找到 <strong>${filteredCustomers.length}</strong> 筆結果${allCustomers.length > filteredCustomers.length ? `（共查詢到 ${allCustomers.length} 筆）` : ''}`;
+            exportSection.style.display = 'flex';
+        }
+        
+        // 顯示載入中
+        function showLoading() {
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>正在查詢...</p>
+                </div>
+            `;
+            document.getElementById('statsDisplay').innerHTML = '查詢中...';
+        }
+        
+        // 匯出CSV
+        function exportToCSV() {
+            if (filteredCustomers.length === 0) {
+                alert('沒有資料可以匯出');
+                return;
+            }
+            
+            let csv = '公司名稱,類型,地址,資本額,核准日期,狀態,標籤\n';
+            
+            filteredCustomers.forEach(customer => {
+                const tags = autoTagCustomer(customer).map(t => t.label).join('|');
+                csv += `"${customer.name}","${customer.type}","${customer.address}","${customer.capitalDisplay}","${customer.date}","${customer.status}","${tags}"\n`;
+            });
+            
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `造紙業潛在客戶_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
