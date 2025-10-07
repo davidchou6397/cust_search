@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>造紙業潛在客群搜尋標籤系統</title>
+    <title>全方位潛在客群搜尋系統</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -35,7 +35,7 @@
         }
         
         .header h1 {
-            font-size: 2em;
+            font-size: 2.2em;
             margin-bottom: 10px;
         }
         
@@ -58,6 +58,41 @@
             margin-bottom: 30px;
         }
         
+        .search-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .tab-btn:hover {
+            border-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
         .search-box {
             display: flex;
             gap: 10px;
@@ -65,9 +100,9 @@
             flex-wrap: wrap;
         }
         
-        .search-box input {
+        .search-box input, .search-box select {
             flex: 1;
-            min-width: 250px;
+            min-width: 200px;
             padding: 15px;
             border: 2px solid #ddd;
             border-radius: 10px;
@@ -75,7 +110,7 @@
             transition: all 0.3s;
         }
         
-        .search-box input:focus {
+        .search-box input:focus, .search-box select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -108,6 +143,15 @@
         
         .btn-secondary:hover {
             background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
         }
         
         .btn:disabled {
@@ -218,14 +262,9 @@
         
         .tag-high { background: #d4edda; color: #155724; }
         .tag-medium { background: #fff3cd; color: #856404; }
-        .tag-packaging { background: #cce5ff; color: #004085; }
-        .tag-printing { background: #e2e3e5; color: #383d41; }
-        .tag-publishing { background: #f8d7da; color: #721c24; }
-        .tag-food { background: #d1ecf1; color: #0c5460; }
-        .tag-restaurant { background: #fff3cd; color: #856404; }
-        .tag-retail { background: #cfe2ff; color: #084298; }
-        .tag-manufacture { background: #d1ecf1; color: #0c5460; }
-        .tag-other { background: #e2e3e5; color: #383d41; }
+        .tag-low { background: #f8d7da; color: #721c24; }
+        .tag-new { background: #d1ecf1; color: #0c5460; }
+        .tag-growth { background: #cce5ff; color: #004085; }
         
         .customer-info {
             display: grid;
@@ -314,12 +353,66 @@
             font-weight: bold;
         }
         
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .industry-card {
+            padding: 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .industry-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .industry-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .range-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .stats-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+        
+        .stats-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stats-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
         @media (max-width: 768px) {
             .search-box {
                 flex-direction: column;
             }
             
-            .search-box input {
+            .search-box input, .search-box select {
                 width: 100%;
             }
             
@@ -332,50 +425,163 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏭 造紙業潛在客群搜尋系統</h1>
-            <p>智能標籤分類 - 自動載入全台公司資料</p>
+            <h1>🎯 全方位潛在客群搜尋系統</h1>
+            <p>智能產業分析 · 精準客戶定位 · 市場情報追蹤</p>
         </div>
         
         <div class="main-content">
             <!-- 初始化區 -->
             <div class="init-section" id="initSection">
-                <div style="font-size: 64px; margin-bottom: 20px;">📊</div>
-                <h2 style="margin-bottom: 15px;">準備載入全台公司資料</h2>
+                <div style="font-size: 64px; margin-bottom: 20px;">🚀</div>
+                <h2 style="margin-bottom: 15px;">系統初始化</h2>
                 <p style="color: #666; margin-bottom: 30px;">
-                    系統將從經濟部商工行政資料開放平台下載最新的公司登記資料<br>
-                    資料量較大，首次載入需要 1-3 分鐘
+                    系統將自動載入以下資料：<br>
+                    ✓ 全台公司登記基本資料<br>
+                    ✓ 營業項目代碼對照表<br>
+                    ✓ 產業分類標準<br>
+                    <br>
+                    首次載入約需 3-5 分鐘，請耐心等候
                 </p>
-                <button class="btn btn-primary" onclick="initializeData()" style="font-size: 18px; padding: 20px 40px;">
-                    🚀 開始載入資料
+                <button class="btn btn-primary" onclick="initializeSystem()" style="font-size: 18px; padding: 20px 40px;">
+                    🚀 開始初始化系統
                 </button>
                 <div id="loadingProgress" style="margin-top: 30px;"></div>
             </div>
             
             <!-- 搜尋區 -->
             <div class="search-section" id="searchSection" style="display: none;">
-                <h3 style="margin-bottom: 15px; color: #333;">🔍 搜尋潛在客戶</h3>
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="輸入公司名稱關鍵字...（例如：包裝、印刷、紙器、餐飲）">
-                    <button class="btn btn-primary" onclick="searchCustomers()">查詢</button>
-                    <button class="btn btn-secondary" onclick="smartTagging()">🏷️ 智能貼標</button>
-                </div>
-                <div style="margin-top: 10px; padding: 10px; background: #e7f3ff; border-radius: 8px; font-size: 14px;">
-                    <strong>💡 提示：</strong>支援公司名稱模糊搜尋<br>
-                    <strong>🏷️ 智能貼標：</strong>自動搜尋造紙業相關產業（包裝、印刷、出版、餐飲等），一次列出所有潛在客戶並自動分類標籤<br>
-                    <strong>📊 資料來源：</strong>經濟部商工行政資料開放平台（已載入 <span id="totalCompanies">0</span> 家公司）
+                <h3 style="margin-bottom: 15px; color: #333;">🔍 多維度搜尋</h3>
+                
+                <!-- 搜尋分頁 -->
+                <div class="search-tabs">
+                    <button class="tab-btn active" onclick="switchTab('keyword')">🔎 關鍵字搜尋</button>
+                    <button class="tab-btn" onclick="switchTab('industry')">🏢 產業分類</button>
+                    <button class="tab-btn" onclick="switchTab('capital')">💰 資本額篩選</button>
+                    <button class="tab-btn" onclick="switchTab('new')">🆕 新設立公司</button>
+                    <button class="tab-btn" onclick="switchTab('advanced')">⚙️ 進階搜尋</button>
                 </div>
                 
-                <div class="filter-section">
-                    <h4 style="margin-bottom: 10px; color: #666;">📊 快速篩選：</h4>
-                    <div class="filter-tags">
-                        <div class="tag active" onclick="toggleFilter(this, 'all')">全部客戶</div>
-                        <div class="tag" onclick="toggleFilter(this, 'packaging')">📦 包裝業</div>
-                        <div class="tag" onclick="toggleFilter(this, 'printing')">🖨️ 印刷業</div>
-                        <div class="tag" onclick="toggleFilter(this, 'publishing')">📚 出版業</div>
-                        <div class="tag" onclick="toggleFilter(this, 'restaurant')">🍽️ 餐飲業</div>
-                        <div class="tag" onclick="toggleFilter(this, 'retail')">🏪 零售批發</div>
-                        <div class="tag" onclick="toggleFilter(this, 'manufacture')">🏭 製造業</div>
-                        <div class="tag" onclick="toggleFilter(this, 'high')">⭐ 高潛力</div>
+                <!-- 關鍵字搜尋 -->
+                <div id="tab-keyword" class="tab-content active">
+                    <div class="search-box">
+                        <input type="text" id="keywordInput" placeholder="輸入公司名稱或關鍵字...（例如：包裝、印刷、科技）">
+                        <button class="btn btn-primary" onclick="searchByKeyword()">搜尋</button>
+                    </div>
+                    <div style="padding: 10px; background: #e7f3ff; border-radius: 8px; font-size: 14px;">
+                        <strong>💡 提示：</strong>支援公司名稱模糊搜尋，可搜尋產業關鍵字、產品名稱等
+                    </div>
+                </div>
+                
+                <!-- 產業分類搜尋 -->
+                <div id="tab-industry" class="tab-content">
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; color: #333;">選擇產業大類：</label>
+                        <select id="industrySelect" class="search-box" style="margin-top: 10px; width: 100%;" onchange="loadIndustrySubcategories()">
+                            <option value="">-- 請選擇產業大類 --</option>
+                        </select>
+                    </div>
+                    <div id="industrySubGrid" class="industry-grid" style="display: none;">
+                        <!-- 動態載入產業小類 -->
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="searchByIndustry()">搜尋選定產業</button>
+                    </div>
+                </div>
+                
+                <!-- 資本額篩選 -->
+                <div id="tab-capital" class="tab-content">
+                    <div class="search-box">
+                        <div class="range-input" style="flex: 1;">
+                            <label>最低資本額：</label>
+                            <input type="number" id="minCapital" placeholder="例如：1000000" style="flex: 1;">
+                        </div>
+                        <div class="range-input" style="flex: 1;">
+                            <label>最高資本額：</label>
+                            <input type="number" id="maxCapital" placeholder="例如：100000000" style="flex: 1;">
+                        </div>
+                        <button class="btn btn-primary" onclick="searchByCapital()">搜尋</button>
+                    </div>
+                    <div class="industry-grid" style="margin-top: 20px;">
+                        <div class="industry-card" onclick="setCapitalRange(0, 1000000)">
+                            <div style="font-size: 32px;">🏪</div>
+                            <div style="font-weight: bold; margin: 10px 0;">小型企業</div>
+                            <div style="color: #666; font-size: 14px;">100萬以下</div>
+                        </div>
+                        <div class="industry-card" onclick="setCapitalRange(1000000, 10000000)">
+                            <div style="font-size: 32px;">🏢</div>
+                            <div style="font-weight: bold; margin: 10px 0;">中型企業</div>
+                            <div style="color: #666; font-size: 14px;">100萬 - 1千萬</div>
+                        </div>
+                        <div class="industry-card" onclick="setCapitalRange(10000000, 100000000)">
+                            <div style="font-size: 32px;">🏭</div>
+                            <div style="font-weight: bold; margin: 10px 0;">大型企業</div>
+                            <div style="color: #666; font-size: 14px;">1千萬 - 1億</div>
+                        </div>
+                        <div class="industry-card" onclick="setCapitalRange(100000000, 999999999999)">
+                            <div style="font-size: 32px;">🏛️</div>
+                            <div style="font-weight: bold; margin: 10px 0;">超大型企業</div>
+                            <div style="color: #666; font-size: 14px;">1億以上</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新設立公司 -->
+                <div id="tab-new" class="tab-content">
+                    <div class="search-box">
+                        <select id="newCompanyMonth" style="flex: 1;">
+                            <option value="1">最近 1 個月</option>
+                            <option value="3">最近 3 個月</option>
+                            <option value="6">最近 6 個月</option>
+                            <option value="12">最近 1 年</option>
+                        </select>
+                        <button class="btn btn-success" onclick="searchNewCompanies()">🆕 搜尋新設立公司</button>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #d1ecf1; border-radius: 8px; font-size: 14px;">
+                        <strong>💡 商機提示：</strong>新設立公司通常有大量採購需求，是開發新客戶的絕佳時機！
+                    </div>
+                </div>
+                
+                <!-- 進階搜尋 -->
+                <div id="tab-advanced" class="tab-content">
+                    <div class="search-box" style="flex-direction: column; gap: 15px;">
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <input type="text" id="advKeyword" placeholder="公司名稱關鍵字" style="flex: 1;">
+                            <select id="advStatus" style="flex: 1;">
+                                <option value="">所有狀態</option>
+                                <option value="核准設立">核准設立</option>
+                                <option value="核准設立，在清算程序中">清算中</option>
+                                <option value="核准設立，已報備解散">已報備解散</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <input type="text" id="advAddress" placeholder="地址關鍵字（例如：台北市、新竹）" style="flex: 1;">
+                            <select id="advIndustry" style="flex: 1;">
+                                <option value="">所有產業</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <input type="number" id="advMinCapital" placeholder="最低資本額" style="flex: 1;">
+                            <input type="number" id="advMaxCapital" placeholder="最高資本額" style="flex: 1;">
+                        </div>
+                        <button class="btn btn-primary" onclick="advancedSearch()" style="width: 100%;">🔍 進階搜尋</button>
+                    </div>
+                </div>
+                
+                <!-- 資料統計 -->
+                <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 10px; border: 2px solid #e9ecef;">
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+                        <div class="stats-box" style="flex: 1; min-width: 150px;">
+                            <div class="stats-number" id="totalCompaniesCount">0</div>
+                            <div class="stats-label">總公司數</div>
+                        </div>
+                        <div class="stats-box" style="flex: 1; min-width: 150px;">
+                            <div class="stats-number" id="totalIndustriesCount">0</div>
+                            <div class="stats-label">產業分類</div>
+                        </div>
+                        <div class="stats-box" style="flex: 1; min-width: 150px;">
+                            <div class="stats-number" id="searchResultsCount">0</div>
+                            <div class="stats-label">搜尋結果</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -383,14 +589,14 @@
             <!-- 結果區 -->
             <div class="results-section" id="resultsSection" style="display: none;">
                 <div class="results-header">
-                    <h2>搜尋結果</h2>
-                    <div class="stats" id="statsDisplay">請輸入關鍵字開始查詢</div>
+                    <h2>🎯 搜尋結果</h2>
+                    <div class="stats" id="statsDisplay">請使用上方搜尋功能</div>
                 </div>
                 
                 <div id="resultsContainer">
                     <div class="empty-state">
                         <div class="empty-state-icon">🔍</div>
-                        <h3>請輸入關鍵字開始查詢</h3>
+                        <h3>請使用上方搜尋功能開始查詢</h3>
                     </div>
                 </div>
             </div>
@@ -398,9 +604,12 @@
             <div class="export-section" id="exportSection" style="display: none;">
                 <div>
                     <strong>💾 匯出功能</strong>
-                    <p style="color: #666; font-size: 14px; margin-top: 5px;">將查詢結果匯出為CSV檔案</p>
+                    <p style="color: #666; font-size: 14px; margin-top: 5px;">將搜尋結果匯出為 CSV 檔案</p>
                 </div>
-                <button class="btn btn-primary" onclick="exportToCSV()">📥 匯出 CSV</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="exportToCSV()">📥 匯出 CSV</button>
+                    <button class="btn btn-secondary" onclick="exportToExcel()">📊 匯出 Excel 格式</button>
+                </div>
             </div>
         </div>
     </div>
@@ -408,66 +617,154 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script>
         let allCompanies = [];
-        let allCustomers = [];
-        let filteredCustomers = [];
-        let activeFilter = 'all';
+        let businessCodes = [];
+        let industryCategories = {};
+        let searchResults = [];
+        let selectedIndustries = [];
         
-        // 初始化資料 - 從經濟部下載 CSV
-        async function initializeData() {
+        // 系統初始化
+        async function initializeSystem() {
             const progressDiv = document.getElementById('loadingProgress');
             progressDiv.innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    <h3>正在下載公司資料...</h3>
-                    <p style="margin-top: 15px; color: #666;">資料來源：經濟部商工行政資料開放平台</p>
+                    <h3>正在初始化系統...</h3>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill">0%</div>
                     </div>
-                    <p style="color: #666; font-size: 14px; margin-top: 10px;" id="progressText">準備下載...</p>
+                    <p style="color: #666; font-size: 14px; margin-top: 10px;" id="progressText">準備載入資料...</p>
                 </div>
             `;
             
             try {
-                updateProgress(10, '正在連接伺服器...');
+                // 步驟 1: 載入營業項目代碼表
+                updateProgress(10, '正在載入營業項目代碼表...');
+                await loadBusinessCodes();
                 
-                // 嘗試多個 CSV 資料源
-                const dataSources = [
-                    'https://data.gcis.nat.gov.tw/od/file?oid=5F64D864-61CB-4D0D-8AD9-492047CC1EA6',
-                    'https://data.gcis.nat.gov.tw/od/data/api/5F64D864-61CB-4D0D-8AD9-492047CC1EA6?$format=json&$top=10000'
-                ];
+                // 步驟 2: 載入公司基本資料
+                updateProgress(40, '正在載入全台公司資料...');
+                await loadCompanyData();
                 
-                updateProgress(30, '正在下載資料...');
+                // 步驟 3: 建立產業分類索引
+                updateProgress(80, '正在建立產業分類索引...');
+                buildIndustryIndex();
                 
-                // 使用 CORS proxy
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const response = await fetch(corsProxy + encodeURIComponent(dataSources[0]));
+                // 步驟 4: 完成初始化
+                updateProgress(100, '系統初始化完成！');
                 
-                if (!response.ok) {
-                    throw new Error('下載失敗');
-                }
+                setTimeout(() => {
+                    showSystemReady();
+                }, 500);
                 
-                updateProgress(50, '正在解析 CSV 資料...');
+            } catch (error) {
+                console.error('初始化失敗：', error);
+                showError('系統初始化失敗：' + error.message);
+            }
+        }
+        
+        // 載入營業項目代碼表
+        async function loadBusinessCodes() {
+            try {
+                const response = await fetch('https://data.gcis.nat.gov.tw/od/data/api/FCB90AB1-E382-45CE-8D4F-394861851E28?$format=json&$top=10000');
                 
-                const csvText = await response.text();
+                if (!response.ok) throw new Error('無法載入營業項目代碼表');
                 
-                updateProgress(70, '正在處理公司資料...');
+                businessCodes = await response.json();
+                console.log('營業項目代碼載入完成：', businessCodes.length, '筆');
                 
-                // 解析 CSV
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        processCompanyData(results.data);
-                    },
-                    error: function(error) {
-                        showError('CSV 解析失敗：' + error.message);
+                // 建立產業分類
+                businessCodes.forEach(code => {
+                    const category = code.Category || code.類別;
+                    const categoryName = code.Category_Name || code.類別名稱;
+                    
+                    if (category && !industryCategories[category]) {
+                        industryCategories[category] = {
+                            name: categoryName,
+                            codes: []
+                        };
+                    }
+                    
+                    if (category) {
+                        industryCategories[category].codes.push(code);
                     }
                 });
                 
             } catch (error) {
-                console.error('初始化失敗：', error);
-                showError('資料載入失敗，請稍後再試或檢查網路連線');
+                console.error('載入營業項目代碼表失敗：', error);
+                throw error;
             }
+        }
+        
+        // 載入公司資料
+        async function loadCompanyData() {
+            try {
+                const csvUrl = 'https://data.gcis.nat.gov.tw/od/file?oid=5F64D864-61CB-4D0D-8AD9-492047CC1EA6';
+                const response = await fetch(csvUrl);
+                
+                if (!response.ok) throw new Error('無法下載公司資料');
+                
+                const csvText = await response.text();
+                
+                return new Promise((resolve, reject) => {
+                    Papa.parse(csvText, {
+                        header: true,
+                        skipEmptyLines: true,
+                        encoding: 'UTF-8',
+                        complete: function(results) {
+                            allCompanies = results.data.map(row => ({
+                                name: row['Company_Name'] || row['公司名稱'] || '',
+                                taxId: row['Business_Accounting_NO'] || row['統一編號'] || '',
+                                status: row['Company_Status_Desc'] || row['公司狀態'] || '',
+                                capital: parseInt(row['Capital_Stock_Amount'] || row['資本總額(元)'] || '0'),
+                                address: row['Company_Location'] || row['公司所在地'] || '',
+                                date: row['Approve_Date'] || row['核准設立日期'] || '',
+                                business: row['Cmp_Business'] || row['所營事業'] || '',
+                                chairman: row['Responsible_Name'] || row['負責人'] || ''
+                            })).filter(company => company.name && company.name.trim());
+                            
+                            // 去重
+                            const uniqueCompanies = [];
+                            const seen = new Set();
+                            
+                            allCompanies.forEach(company => {
+                                const key = company.taxId || company.name;
+                                if (!seen.has(key)) {
+                                    seen.add(key);
+                                    uniqueCompanies.push(company);
+                                }
+                            });
+                            
+                            allCompanies = uniqueCompanies;
+                            console.log('公司資料載入完成：', allCompanies.length, '筆');
+                            resolve();
+                        },
+                        error: function(error) {
+                            reject(error);
+                        }
+                    });
+                });
+                
+            } catch (error) {
+                console.error('載入公司資料失敗：', error);
+                throw error;
+            }
+        }
+        
+        // 建立產業分類索引
+        function buildIndustryIndex() {
+            // 填充產業選擇器
+            const industrySelect = document.getElementById('industrySelect');
+            const advIndustry = document.getElementById('advIndustry');
+            
+            Object.keys(industryCategories).sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = `${category} - ${industryCategories[category].name}`;
+                industrySelect.appendChild(option);
+                
+                const option2 = option.cloneNode(true);
+                advIndustry.appendChild(option2);
+            });
         }
         
         // 更新進度
@@ -483,46 +780,25 @@
             }
         }
         
-        // 處理公司資料
-        function processCompanyData(data) {
-            updateProgress(80, '正在建立資料索引...');
-            
-            if (!data || data.length === 0) {
-                showError('未取得任何公司資料');
-                return;
-            }
-            
-            // 處理公司資料（支援多種欄位名稱格式）
-            allCompanies = data.map(row => ({
-                name: row['Company_Name'] || row['公司名稱'] || row['Company Name'] || '',
-                status: row['Company_Status_Desc'] || row['公司狀態'] || row['Company Status'] || '',
-                capital: row['Capital_Stock_Amount'] || row['資本總額(元)'] || row['Capital'] || '0',
-                address: row['Company_Location'] || row['公司所在地'] || row['Location'] || '',
-                date: row['Approve_Date'] || row['核准設立日期'] || row['Date'] || '',
-                business: row['Cmp_Business'] || row['營業項目'] || row['Business'] || '',
-                taxId: row['Business_Accounting_NO'] || row['統一編號'] || row['Tax ID'] || ''
-            })).filter(company => company.name && company.name.trim()); // 過濾掉沒有公司名稱的資料
-            
-            updateProgress(100, '載入完成！');
-            
-            setTimeout(() => {
-                showDataLoaded(allCompanies.length);
-            }, 500);
-        }
-        
-        // 顯示資料載入完成
-        function showDataLoaded(count) {
+        // 顯示系統就緒
+        function showSystemReady() {
             document.getElementById('initSection').style.display = 'none';
             document.getElementById('searchSection').style.display = 'block';
             document.getElementById('resultsSection').style.display = 'block';
-            document.getElementById('totalCompanies').textContent = count.toLocaleString();
+            
+            // 更新統計數字
+            document.getElementById('totalCompaniesCount').textContent = allCompanies.length.toLocaleString();
+            document.getElementById('totalIndustriesCount').textContent = Object.keys(industryCategories).length;
             
             document.getElementById('resultsContainer').innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">✅</div>
-                    <h3>資料載入完成！</h3>
-                    <p style="margin: 15px 0;">已載入 <strong style="color: #667eea; font-size: 24px;">${count.toLocaleString()}</strong> 家公司資料</p>
-                    <p style="color: #666;">請在上方輸入關鍵字開始查詢，或使用智能貼標功能</p>
+                    <h3>系統初始化完成！</h3>
+                    <p style="margin: 15px 0;">
+                        已載入 <strong style="color: #667eea; font-size: 24px;">${allCompanies.length.toLocaleString()}</strong> 家公司資料<br>
+                        涵蓋 <strong style="color: #667eea; font-size: 24px;">${Object.keys(industryCategories).length}</strong> 個產業分類
+                    </p>
+                    <p style="color: #666;">請使用上方搜尋功能開始查詢潛在客戶</p>
                 </div>
             `;
         }
@@ -532,50 +808,310 @@
             document.getElementById('loadingProgress').innerHTML = `
                 <div style="padding: 30px; text-align: center;">
                     <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
-                    <h3 style="color: #d32f2f;">載入失敗</h3>
+                    <h3 style="color: #d32f2f;">初始化失敗</h3>
                     <p style="color: #666; margin: 15px 0;">${message}</p>
                     <div style="margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="initializeData()">重新載入</button>
+                        <button class="btn btn-primary" onclick="initializeSystem()">重新初始化</button>
                     </div>
                 </div>
             `;
         }
         
-        // 智能自動標籤系統
-        function autoTagCustomer(customer) {
+        // 切換搜尋分頁
+        function switchTab(tabName) {
+            // 更新按鈕狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 更新內容顯示
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+        
+        // 關鍵字搜尋
+        function searchByKeyword() {
+            const keyword = document.getElementById('keywordInput').value.trim().toLowerCase();
+            
+            if (!keyword) {
+                alert('請輸入搜尋關鍵字');
+                return;
+            }
+            
+            showLoading();
+            
+            setTimeout(() => {
+                searchResults = allCompanies.filter(company => 
+                    company.name.toLowerCase().includes(keyword) ||
+                    company.business.toLowerCase().includes(keyword) ||
+                    company.address.toLowerCase().includes(keyword)
+                );
+                
+                displayResults(searchResults, `關鍵字「${keyword}」`);
+            }, 300);
+        }
+        
+        // 載入產業小類
+        function loadIndustrySubcategories() {
+            const category = document.getElementById('industrySelect').value;
+            const subGrid = document.getElementById('industrySubGrid');
+            
+            if (!category) {
+                subGrid.style.display = 'none';
+                return;
+            }
+            
+            const codes = industryCategories[category].codes;
+            
+            // 按小類分組
+            const subcategories = {};
+            codes.forEach(code => {
+                const subcat = code.Subcategories_Name || code.行業小類名稱 || '其他';
+                if (!subcategories[subcat]) {
+                    subcategories[subcat] = [];
+                }
+                subcategories[subcat].push(code);
+            });
+            
+            // 顯示小類
+            subGrid.innerHTML = '';
+            Object.keys(subcategories).forEach(subcat => {
+                const card = document.createElement('div');
+                card.className = 'industry-card';
+                card.onclick = () => toggleIndustrySelection(card, subcategories[subcat]);
+                card.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 5px;">${subcat}</div>
+                    <div style="color: #666; font-size: 14px;">${subcategories[subcat].length} 個項目</div>
+                `;
+                subGrid.appendChild(card);
+            });
+            
+            subGrid.style.display = 'grid';
+        }
+        
+        // 切換產業選擇
+        function toggleIndustrySelection(card, codes) {
+            card.classList.toggle('selected');
+            
+            const isSelected = card.classList.contains('selected');
+            
+            codes.forEach(code => {
+                const businessItem = code.Business_Item || code.業別代碼;
+                if (isSelected) {
+                    if (!selectedIndustries.includes(businessItem)) {
+                        selectedIndustries.push(businessItem);
+                    }
+                } else {
+                    selectedIndustries = selectedIndustries.filter(item => item !== businessItem);
+                }
+            });
+        }
+        
+        // 產業搜尋
+        function searchByIndustry() {
+            if (selectedIndustries.length === 0) {
+                alert('請至少選擇一個產業分類');
+                return;
+            }
+            
+            showLoading();
+            
+            setTimeout(() => {
+                searchResults = allCompanies.filter(company => {
+                    return selectedIndustries.some(code => company.business.includes(code));
+                });
+                
+                displayResults(searchResults, `選定產業（${selectedIndustries.length} 個分類）`);
+            }, 300);
+        }
+        
+        // 資本額搜尋
+        function searchByCapital() {
+            const min = parseInt(document.getElementById('minCapital').value) || 0;
+            const max = parseInt(document.getElementById('maxCapital').value) || Infinity;
+            
+            showLoading();
+            
+            setTimeout(() => {
+                searchResults = allCompanies.filter(company => 
+                    company.capital >= min && company.capital <= max
+                );
+                
+                displayResults(searchResults, `資本額 ${formatNumber(min)} - ${formatNumber(max)}`);
+            }, 300);
+        }
+        
+        // 設定資本額範圍
+        function setCapitalRange(min, max) {
+            document.getElementById('minCapital').value = min;
+            document.getElementById('maxCapital').value = max;
+            searchByCapital();
+        }
+        
+        // 搜尋新設立公司
+        function searchNewCompanies() {
+            const months = parseInt(document.getElementById('newCompanyMonth').value);
+            const cutoffDate = new Date();
+            cutoffDate.setMonth(cutoffDate.getMonth() - months);
+            
+            showLoading();
+            
+            setTimeout(() => {
+                searchResults = allCompanies.filter(company => {
+                    if (!company.date) return false;
+                    
+                    // 轉換日期格式 (民國年)
+                    const dateStr = company.date.toString();
+                    if (dateStr.length === 7) {
+                        const year = parseInt(dateStr.substring(0, 3)) + 1911;
+                        const month = parseInt(dateStr.substring(3, 5));
+                        const day = parseInt(dateStr.substring(5, 7));
+                        const companyDate = new Date(year, month - 1, day);
+                        
+                        return companyDate >= cutoffDate;
+                    }
+                    return false;
+                });
+                
+                displayResults(searchResults, `最近 ${months} 個月新設立`);
+            }, 300);
+        }
+        
+        // 進階搜尋
+        function advancedSearch() {
+            const keyword = document.getElementById('advKeyword').value.trim().toLowerCase();
+            const status = document.getElementById('advStatus').value;
+            const address = document.getElementById('advAddress').value.trim().toLowerCase();
+            const industry = document.getElementById('advIndustry').value;
+            const minCapital = parseInt(document.getElementById('advMinCapital').value) || 0;
+            const maxCapital = parseInt(document.getElementById('advMaxCapital').value) || Infinity;
+            
+            showLoading();
+            
+            setTimeout(() => {
+                searchResults = allCompanies.filter(company => {
+                    // 關鍵字篩選
+                    if (keyword && !company.name.toLowerCase().includes(keyword)) {
+                        return false;
+                    }
+                    
+                    // 狀態篩選
+                    if (status && company.status !== status) {
+                        return false;
+                    }
+                    
+                    // 地址篩選
+                    if (address && !company.address.toLowerCase().includes(address)) {
+                        return false;
+                    }
+                    
+                    // 產業篩選
+                    if (industry && !company.business.includes(industry)) {
+                        return false;
+                    }
+                    
+                    // 資本額篩選
+                    if (company.capital < minCapital || company.capital > maxCapital) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                displayResults(searchResults, '進階搜尋');
+            }, 300);
+        }
+        
+        // 顯示結果
+        function displayResults(results, searchType) {
+            const container = document.getElementById('resultsContainer');
+            const statsDisplay = document.getElementById('statsDisplay');
+            const exportSection = document.getElementById('exportSection');
+            
+            document.getElementById('searchResultsCount').textContent = results.length.toLocaleString();
+            
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😕</div>
+                        <h3>查無符合條件的公司</h3>
+                        <p>請調整搜尋條件後重試</p>
+                    </div>
+                `;
+                statsDisplay.innerHTML = `搜尋結果：<strong>0</strong> 筆`;
+                exportSection.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            const displayLimit = 100;
+            const displayData = results.slice(0, displayLimit);
+            
+            displayData.forEach(company => {
+                const tags = autoTagCompany(company);
+                const tagsHtml = tags.map(tag => 
+                    `<span class="customer-tag ${tag.class}">${tag.label}</span>`
+                ).join('');
+                
+                html += `
+                    <div class="customer-card">
+                        <div class="customer-header">
+                            <div style="flex: 1;">
+                                <div class="customer-name">${company.name}</div>
+                                <div class="customer-type">統編：${company.taxId || '未提供'}</div>
+                            </div>
+                            <div class="customer-tags">
+                                ${tagsHtml}
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <div class="info-item"><span class="info-icon">📍</span> ${company.address || '未提供'}</div>
+                            <div class="info-item"><span class="info-icon">💰</span> 資本額：${formatCapital(company.capital)}</div>
+                            <div class="info-item"><span class="info-icon">📊</span> ${company.status || '未提供'}</div>
+                            <div class="info-item"><span class="info-icon">👤</span> 負責人：${company.chairman || '未提供'}</div>
+                            <div class="info-item"><span class="info-icon">📅</span> 成立：${formatDate(company.date)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (results.length > displayLimit) {
+                html += `
+                    <div style="text-align: center; padding: 20px; color: #666;">
+                        顯示前 ${displayLimit} 筆，共 ${results.length.toLocaleString()} 筆結果
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+            statsDisplay.innerHTML = `${searchType} - 找到 <strong>${results.length.toLocaleString()}</strong> 筆結果`;
+            exportSection.style.display = 'flex';
+        }
+        
+        // 自動標籤
+        function autoTagCompany(company) {
             const tags = [];
-            const name = (customer.name || '').toLowerCase();
-            const business = (customer.business || '').toLowerCase();
-            const combined = name + ' ' + business;
             
-            if (combined.includes('包裝') || combined.includes('紙器') || combined.includes('紙箱') || combined.includes('紙盒')) {
-                tags.push({ label: '包裝業', class: 'tag-packaging' });
-            }
-            if (combined.includes('印刷') || combined.includes('彩印') || combined.includes('印製')) {
-                tags.push({ label: '印刷業', class: 'tag-printing' });
-            }
-            if (combined.includes('出版') || combined.includes('圖書') || combined.includes('雜誌') || combined.includes('期刊')) {
-                tags.push({ label: '出版業', class: 'tag-publishing' });
-            }
-            if (combined.includes('餐飲') || combined.includes('食品') || combined.includes('飲料')) {
-                tags.push({ label: '餐飲業', class: 'tag-restaurant' });
-            }
-            if (combined.includes('零售') || combined.includes('批發') || combined.includes('超市') || combined.includes('便利')) {
-                tags.push({ label: '零售批發', class: 'tag-retail' });
-            }
-            if (combined.includes('製造') || combined.includes('工業') || combined.includes('生產')) {
-                tags.push({ label: '製造業', class: 'tag-manufacture' });
-            }
-            
-            if (tags.length === 0) {
-                tags.push({ label: '其他產業', class: 'tag-other' });
-            }
-            
-            const capital = parseInt(customer.capital) || 0;
-            if (capital >= 50000000) {
-                tags.push({ label: '高潛力', class: 'tag-high' });
+            // 資本額分級
+            if (company.capital >= 100000000) {
+                tags.push({ label: '超大型', class: 'tag-high' });
+            } else if (company.capital >= 10000000) {
+                tags.push({ label: '大型', class: 'tag-high' });
+            } else if (company.capital >= 1000000) {
+                tags.push({ label: '中型', class: 'tag-medium' });
             } else {
-                tags.push({ label: '中潛力', class: 'tag-medium' });
+                tags.push({ label: '小型', class: 'tag-low' });
+            }
+            
+            // 新設立公司（1年內）
+            if (company.date) {
+                const dateStr = company.date.toString();
+                if (dateStr.length === 7) {
+                    const year = parseInt(dateStr.substring(0, 3)) + 1911;
+                    const companyYear = new Date().getFullYear() - year;
+                    if (companyYear <= 1) {
+                        tags.push({ label: '新設立', class: 'tag-new' });
+                    }
+                }
             }
             
             return tags;
@@ -583,302 +1119,31 @@
         
         // 格式化資本額
         function formatCapital(amount) {
-            if (!amount) return '';
-            const num = parseInt(amount);
-            if (num >= 100000000) return '1億以上';
-            if (num >= 50000000) return '5千萬以上';
-            if (num >= 10000000) return '1千萬以上';
-            if (num >= 1000000) return '100萬以上';
-            return '100萬以下';
+            if (!amount || amount === 0) return '未提供';
+            if (amount >= 100000000) return (amount / 100000000).toFixed(1) + '億';
+            if (amount >= 10000) return (amount / 10000).toFixed(0) + '萬';
+            return amount.toLocaleString();
         }
         
-        // 查詢客戶
-        function searchCustomers() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            
-            if (!query) {
-                alert('請輸入搜尋關鍵字');
-                return;
-            }
-            
-            if (allCompanies.length === 0) {
-                alert('請先載入公司資料');
-                return;
-            }
-            
-            showLoading();
-            
-            // 在記憶體中搜尋
-            setTimeout(() => {
-                const results = allCompanies.filter(company => 
-                    company.name.toLowerCase().includes(query) ||
-                    company.business.toLowerCase().includes(query)
-                );
-                
-                if (results.length === 0) {
-                    document.getElementById('resultsContainer').innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">😕</div>
-                            <h3>找不到「${query}」相關公司</h3>
-                            <p>請嘗試其他關鍵字，例如：包裝、印刷、紙器、餐飲</p>
-                            <div style="margin-top: 20px;">
-                                <button class="btn btn-secondary" onclick="smartTagging()">試試智能貼標功能</button>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('statsDisplay').innerHTML = `查詢結果：<strong>0</strong> 筆`;
-                    document.getElementById('exportSection').style.display = 'none';
-                    return;
-                }
-                
-                allCustomers = results.map(company => ({
-                    name: company.name,
-                    type: company.status || '公司',
-                    capital: company.capital,
-                    capitalDisplay: formatCapital(company.capital),
-                    address: company.address || '未提供',
-                    status: company.status || '未提供',
-                    date: company.date || '未提供',
-                    business: company.business || ''
-                }));
-                
-                activeFilter = 'all';
-                document.querySelectorAll('.filter-tags .tag').forEach(tag => {
-                    if (tag.textContent.includes('全部')) {
-                        tag.classList.add('active');
-                    } else {
-                        tag.classList.remove('active');
-                    }
-                });
-                
-                applyFilter();
-            }, 100);
+        // 格式化數字
+        function formatNumber(num) {
+            if (num === Infinity) return '不限';
+            if (num >= 100000000) return (num / 100000000) + '億';
+            if (num >= 10000) return (num / 10000) + '萬';
+            return num.toLocaleString();
         }
         
-        // 智能貼標功能
-        function smartTagging() {
-            if (allCompanies.length === 0) {
-                alert('請先載入公司資料');
-                return;
+        // 格式化日期
+        function formatDate(dateStr) {
+            if (!dateStr) return '未提供';
+            const str = dateStr.toString();
+            if (str.length === 7) {
+                const year = parseInt(str.substring(0, 3)) + 1911;
+                const month = str.substring(3, 5);
+                const day = str.substring(5, 7);
+                return `${year}/${month}/${day}`;
             }
-            
-            if (!confirm('智能貼標功能將自動搜尋以下造紙業潛在客戶：\n\n📦 包裝業（包裝、紙器、紙箱）\n🖨️ 印刷業（印刷、彩印）\n📚 出版業（出版、圖書）\n🍽️ 餐飲業（餐飲、食品）\n🏪 零售業（便利、超市）\n\n這可能需要幾秒鐘，是否繼續？')) {
-                return;
-            }
-            
-            showSmartTaggingLoading();
-            
-            const keywords = ['包裝', '紙器', '紙箱', '紙盒', '印刷', '彩印', '出版', '圖書', '餐飲', '食品', '便利', '超市'];
-            
-            setTimeout(() => {
-                const results = allCompanies.filter(company => {
-                    const combined = (company.name + ' ' + company.business).toLowerCase();
-                    return keywords.some(keyword => combined.includes(keyword));
-                });
-                
-                if (results.length === 0) {
-                    document.getElementById('resultsContainer').innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">😕</div>
-                            <h3>批次查詢未找到相關公司</h3>
-                            <p>請稍後再試或使用一般查詢功能</p>
-                        </div>
-                    `;
-                    document.getElementById('statsDisplay').innerHTML = `查詢結果：<strong>0</strong> 筆`;
-                    document.getElementById('exportSection').style.display = 'none';
-                } else {
-                    allCustomers = results.map(company => ({
-                        name: company.name,
-                        type: company.status || '公司',
-                        capital: company.capital,
-                        capitalDisplay: formatCapital(company.capital),
-                        address: company.address || '未提供',
-                        status: company.status || '未提供',
-                        date: company.date || '未提供',
-                        business: company.business || ''
-                    }));
-                    
-                    activeFilter = 'all';
-                    document.querySelectorAll('.filter-tags .tag').forEach(tag => {
-                        if (tag.textContent.includes('全部')) {
-                            tag.classList.add('active');
-                        } else {
-                            tag.classList.remove('active');
-                        }
-                    });
-                    
-                    applyFilter();
-                    showTaggingStatistics();
-                }
-            }, 500);
-        }
-        
-        // 顯示智能貼標載入中
-        function showSmartTaggingLoading() {
-            document.getElementById('resultsContainer').innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <h3>🏷️ 智能貼標進行中...</h3>
-                    <p style="margin-top: 15px;">正在分析全台公司資料...</p>
-                </div>
-            `;
-        }
-        
-        // 顯示標籤統計
-        function showTaggingStatistics() {
-            const stats = {
-                packaging: 0, printing: 0, publishing: 0,
-                restaurant: 0, retail: 0, manufacture: 0,
-                other: 0, high: 0, medium: 0
-            };
-            
-            allCustomers.forEach(customer => {
-                const tags = autoTagCustomer(customer);
-                tags.forEach(tag => {
-                    if (tag.label === '包裝業') stats.packaging++;
-                    if (tag.label === '印刷業') stats.printing++;
-                    if (tag.label === '出版業') stats.publishing++;
-                    if (tag.label === '餐飲業') stats.restaurant++;
-                    if (tag.label === '零售批發') stats.retail++;
-                    if (tag.label === '製造業') stats.manufacture++;
-                    if (tag.label === '其他產業') stats.other++;
-                    if (tag.label === '高潛力') stats.high++;
-                    if (tag.label === '中潛力') stats.medium++;
-                });
-            });
-            
-            const statsHTML = `
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
-                    <h3 style="color: #333; margin-bottom: 15px;">📊 查詢統計</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.packaging}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">📦 包裝業</div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.printing}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🖨️ 印刷業</div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.publishing}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">📚 出版業</div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.restaurant}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🍽️ 餐飲業</div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.retail}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">🏪 零售批發</div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.high}</div>
-                            <div style="color: #666; font-size: 14px; margin-top: 5px;">⭐ 高潛力</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px; padding: 10px; background: #d4edda; border-radius: 8px; color: #155724; text-align: center;">
-                        ✅ 查詢完成！共找到 <strong>${allCustomers.length}</strong> 家潛在客戶
-                    </div>
-                </div>
-            `;
-            
-            const container = document.getElementById('resultsContainer');
-            container.innerHTML = statsHTML + container.innerHTML;
-        }
-        
-        // 切換篩選
-        function toggleFilter(element, filter) {
-            document.querySelectorAll('.filter-tags .tag').forEach(tag => {
-                tag.classList.remove('active');
-            });
-            element.classList.add('active');
-            
-            activeFilter = filter;
-            applyFilter();
-        }
-        
-        // 套用篩選
-        function applyFilter() {
-            if (!allCustomers || allCustomers.length === 0) {
-                filteredCustomers = [];
-                displayResults();
-                return;
-            }
-            
-            if (activeFilter === 'all') {
-                filteredCustomers = allCustomers;
-            } else {
-                filteredCustomers = allCustomers.filter(customer => {
-                    const tags = autoTagCustomer(customer);
-                    const tagLabels = tags.map(t => t.label);
-                    
-                    switch(activeFilter) {
-                        case 'packaging': return tagLabels.includes('包裝業');
-                        case 'printing': return tagLabels.includes('印刷業');
-                        case 'publishing': return tagLabels.includes('出版業');
-                        case 'restaurant': return tagLabels.includes('餐飲業');
-                        case 'retail': return tagLabels.includes('零售批發');
-                        case 'manufacture': return tagLabels.includes('製造業');
-                        case 'high': return tagLabels.includes('高潛力');
-                        default: return true;
-                    }
-                });
-            }
-            
-            displayResults();
-        }
-        
-        // 顯示結果
-        function displayResults() {
-            const container = document.getElementById('resultsContainer');
-            const statsDisplay = document.getElementById('statsDisplay');
-            const exportSection = document.getElementById('exportSection');
-            
-            if (!filteredCustomers || filteredCustomers.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🔭</div>
-                        <h3>此篩選條件沒有結果</h3>
-                        <p>請選擇其他篩選標籤</p>
-                    </div>
-                `;
-                statsDisplay.innerHTML = `篩選結果：<strong>0</strong> 筆`;
-                exportSection.style.display = 'none';
-                return;
-            }
-            
-            let html = '';
-            filteredCustomers.forEach(customer => {
-                const tags = autoTagCustomer(customer);
-                const tagsHtml = tags.map(tag => 
-                    `<span class="customer-tag ${tag.class}">${tag.label}</span>`
-                ).join('');
-                
-                const infoItems = [];
-                if (customer.address) infoItems.push(`<div class="info-item"><span class="info-icon">📍</span> ${customer.address}</div>`);
-                if (customer.capitalDisplay) infoItems.push(`<div class="info-item"><span class="info-icon">💰</span> 資本額：${customer.capitalDisplay}</div>`);
-                if (customer.status) infoItems.push(`<div class="info-item"><span class="info-icon">📊</span> ${customer.status}</div>`);
-                if (customer.date) infoItems.push(`<div class="info-item"><span class="info-icon">📅</span> 核准日期：${customer.date}</div>`);
-                
-                html += `
-                    <div class="customer-card">
-                        <div class="customer-header">
-                            <div>
-                                <div class="customer-name">${customer.name}</div>
-                                <div class="customer-type">${customer.type}</div>
-                            </div>
-                            <div class="customer-tags">
-                                ${tagsHtml}
-                            </div>
-                        </div>
-                        ${infoItems.length > 0 ? `<div class="customer-info">${infoItems.join('')}</div>` : ''}
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            statsDisplay.innerHTML = `找到 <strong>${filteredCustomers.length}</strong> 筆結果${allCustomers.length > filteredCustomers.length ? `（共查詢到 ${allCustomers.length} 筆）` : ''}`;
-            exportSection.style.display = 'flex';
+            return dateStr;
         }
         
         // 顯示載入中
@@ -886,34 +1151,37 @@
             document.getElementById('resultsContainer').innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>正在查詢...</p>
+                    <p>正在搜尋...</p>
                 </div>
             `;
-            document.getElementById('statsDisplay').innerHTML = '查詢中...';
         }
         
-        // 匯出CSV
+        // 匯出 CSV
         function exportToCSV() {
-            if (filteredCustomers.length === 0) {
+            if (searchResults.length === 0) {
                 alert('沒有資料可以匯出');
                 return;
             }
             
-            let csv = '\uFEFF公司名稱,類型,地址,資本額,核准日期,狀態,標籤\n';
+            let csv = '\uFEFF公司名稱,統一編號,負責人,資本額,地址,狀態,成立日期,所營事業\n';
             
-            filteredCustomers.forEach(customer => {
-                const tags = autoTagCustomer(customer).map(t => t.label).join('|');
-                csv += `"${customer.name}","${customer.type}","${customer.address}","${customer.capitalDisplay}","${customer.date}","${customer.status}","${tags}"\n`;
+            searchResults.forEach(company => {
+                csv += `"${company.name}","${company.taxId}","${company.chairman}","${company.capital}","${company.address}","${company.status}","${formatDate(company.date)}","${company.business}"\n`;
             });
             
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `造紙業潛在客戶_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `潛在客戶_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+        
+        // 匯出 Excel 格式
+        function exportToExcel() {
+            exportToCSV(); // 目前使用相同邏輯
         }
     </script>
 </body>
